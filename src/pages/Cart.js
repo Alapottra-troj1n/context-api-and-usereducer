@@ -1,10 +1,32 @@
 import React from "react";
+import { useProducts } from "../context/ProductContext";
+import CartProduct from "../components/CartProduct";
 
 const Cart = () => {
+  const { state: { cart, loading, error } } = useProducts();
+
+
+  let content;
+
+  if (loading) {
+    content = <p>Loading Cart</p>
+  }
+  if (error) {
+    content = <p>Something went wrong</p>
+  }
+  if (!loading && !error) {
+    content = cart.map(product => <CartProduct key={product.model} product={product} />)
+
+  }
+  if(!loading && !error && cart.length === 0) {
+   content = <p>No Products to Show</p>
+  }   
+
+
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 max-w-7xl gap-14 mx-auto my-10'>
-      <h1>This is cart</h1>
-    </div>
+  <div className="grid grid-cols-3 gap-5" >
+      {content}
+  </div>
   );
 };
 

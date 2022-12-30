@@ -4,16 +4,30 @@ import ProductCard from "../components/ProductCard";
 
 
 const Home = () => {
-  const { state: { products, loading} } = useProducts();
+  const { state: { products, loading, error } } = useProducts();
+
+
+  let content;
+
+  if (loading) {
+    content = <p>Loading Content</p>
+  }
+  if (error) {
+    content = <p>Something went wrong</p>
+  }
+  if (!loading && !error) {
+    content = products.map(product => <ProductCard key={product.model} product={product} />)
+
+  }
+  if(!loading && !error && products.length === 0) {
+    <p>No Products to Show</p>
+  }   
 
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 max-w-7xl gap-14 mx-auto my-10'>
-      {loading && 'loading...........'}
-      {
-        products.map(product => <ProductCard product={product}/> )
-      }
-    </div>
+  <div className="grid grid-cols-3 gap-5" >
+      {content}
+  </div>
   );
 };
 
